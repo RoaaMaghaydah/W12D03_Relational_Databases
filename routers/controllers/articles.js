@@ -10,18 +10,29 @@ const getAllArticles = (req, res) => {
 };
 
 const getArticlesByAuthor = (req, res) => {
-	// const author = req.query.author;
+	// const auth=req.query.author;
+	// const query='SELECT users.id  FROM users  WHERE firstName=?'
+	// console.log("qu",query)
+	// const arr=[auth];
+	// db.query(query,arr, (err, result) => {
+	// 	if (err) throw err;
+	// 	console.log('RESULT: ',result);
+	// 	res.json(result)
+	// });
 
-	// if (!author) return res.status(404).json('not found');
-
-	// articlesModel
-	// 	.find({ author })
-	// 	.then((result) => {
-	// 		res.status(200).json(result);
-	// 	})
-	// 	.catch((err) => {
-	// 		res.send(err);
-	// 	});
+	const auth=req.query.author;
+	const query =`SELECT *  FROM  articles
+	INNER JOIN  users ON users.id=author_id`;
+	//const arr=[auth];
+	db.query(query, (err, result) => {
+		const arr=[]
+		if (err) throw err;
+		result.map((elem,i)=>{if(elem.firstName==auth){
+			arr.push({title:elem.title,description:elem.description})
+		}})
+	//	console.log('RESULT: ', result[0]);
+		res.json(arr)
+	});
 };
 
 const getAnArticleById = (req, res) => {
