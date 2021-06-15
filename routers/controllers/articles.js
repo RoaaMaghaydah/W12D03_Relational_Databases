@@ -10,20 +10,10 @@ const getAllArticles = (req, res) => {
 };
 
 const getArticlesByAuthor = (req, res) => {
-	// const auth=req.query.author;
-	// const query='SELECT users.id  FROM users  WHERE firstName=?'
-	// console.log("qu",query)
-	// const arr=[auth];
-	// db.query(query,arr, (err, result) => {
-	// 	if (err) throw err;
-	// 	console.log('RESULT: ',result);
-	// 	res.json(result)
-	// });
-
+	
 	const auth = req.query.author;
 	const query = `SELECT *  FROM  articles
 	INNER JOIN  users ON users.id=author_id`;
-	//const arr=[auth];
 	db.query(query, (err, result) => {
 		const arr = []
 		if (err) throw err;
@@ -32,26 +22,20 @@ const getArticlesByAuthor = (req, res) => {
 				arr.push({ title: elem.title, description: elem.description })
 			}
 		})
-		//	console.log('RESULT: ', result[0]);
 		res.json(arr)
 	});
 };
 
 const getAnArticleById = (req, res) => {
-	// const _id = req.params.id;
-
-	// if (!_id) return res.status(404).json('not found');
-
-	// articlesModel
-	// 	.findOne({ _id })
-	// 	.populate('author', 'firstName -_id')
-	// 	.exec()
-	// 	.then((result) => {
-	// 		res.status(200).json(result);
-	// 	})
-	// 	.catch((err) => {
-	// 		res.send(err);
-	// 	});
+	const auth = req.params.id;
+	const query = `SELECT users.firstName ,users.id  FROM  articles
+	INNER JOIN  users ON users.id=${auth}`;  
+	db.query(query, (err, result) => {
+		const arr = []
+		if (err) throw err;		
+		res.json(result)
+	});
+	
 };
 
 const createNewArticle = (req, res) => {
@@ -90,19 +74,23 @@ const deleteArticleById = (req, res) => {
 };
 
 const deleteArticlesByAuthor = (req, res) => {
-	// const author = req.body.author;
+	const auth = req.query.author;
+	const query = `SELECT *  FROM  articles
+	INNER JOIN  users ON users.id=author_id AND  users.firstName=?`;
+	const arr = [auth]
+	db.query(query,arr,(err, result) => {	
+		if (err) throw err;
+		console.log("roaa",result)
+		// result.map((elem, i) => {
+		// 	if (elem.firstName == auth && elem.is_deleted !== 1) {
+			
+		// 		elem.is_deleted=1;
+		// 		arr.push(elem)
+		// 	}
+		// })
+		
+	});
 
-	// articlesModel
-	// 	.deleteMany({ author })
-	// 	.then((result) => {
-	// 		res.status(200).json({
-	// 			success: true,
-	// 			message: `Success Delete atricle with id => ${author}`,
-	// 		});
-	// 	})
-	// 	.catch((err) => {
-	// 		res.send(err);
-	// 	});
 };
 
 module.exports = {
