@@ -27,7 +27,7 @@ const getArticlesByAuthor = (req, res) => {
 	db.query(query, (err, result) => {
 		const arr=[]
 		if (err) throw err;
-		result.map((elem,i)=>{if(elem.firstName==auth){
+		result.map((elem,i)=>{if(elem.firstName==auth&&elem.is_deleted!==1){
 			arr.push({title:elem.title,description:elem.description})
 		}})
 	//	console.log('RESULT: ', result[0]);
