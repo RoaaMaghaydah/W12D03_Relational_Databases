@@ -1,5 +1,6 @@
-USE MERAKI_Academy_Project_3;
+CREATE DATABASE  MERAKI_Academy_Project_3;
 
+USE MERAKI_Academy_Project_3;
 CREATE TABLE roles (
     role_id INT AUTO_INCREMENT NOT NULL,
     role VARCHAR(255) NOT NULL,
