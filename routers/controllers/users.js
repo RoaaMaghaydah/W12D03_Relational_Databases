@@ -13,8 +13,6 @@ const createNewAuthor = async(req, res) => {
 	const password=encryptedPassword;
 	const role_id=req.body.role_id;
 
-	
-	//const passs=bcrypt.hash(password, 10)
 	const query = `INSERT INTO users (firstName, lastName, age, country, email, password,role_id) VALUES (?,?,?,?,?,?,?)`;
 	const data = [firstName, lastName, age, country, email,password,role_id];
 	db.query(query, data, (err, results) => {
