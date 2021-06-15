@@ -20,17 +20,19 @@ const getArticlesByAuthor = (req, res) => {
 	// 	res.json(result)
 	// });
 
-	const auth=req.query.author;
-	const query =`SELECT *  FROM  articles
+	const auth = req.query.author;
+	const query = `SELECT *  FROM  articles
 	INNER JOIN  users ON users.id=author_id`;
 	//const arr=[auth];
 	db.query(query, (err, result) => {
-		const arr=[]
+		const arr = []
 		if (err) throw err;
-		result.map((elem,i)=>{if(elem.firstName==auth&&elem.is_deleted!==1){
-			arr.push({title:elem.title,description:elem.description})
-		}})
-	//	console.log('RESULT: ', result[0]);
+		result.map((elem, i) => {
+			if (elem.firstName == auth && elem.is_deleted !== 1) {
+				arr.push({ title: elem.title, description: elem.description })
+			}
+		})
+		//	console.log('RESULT: ', result[0]);
 		res.json(arr)
 	});
 };
@@ -64,17 +66,20 @@ const createNewArticle = (req, res) => {
 };
 
 const updateAnArticleById = (req, res) => {
-	// const id = req.params.id;
-
-	// articlesModel
-	// 	.findByIdAndUpdate(id, req.body, { new: true })
-	// 	.then((result) => {
-	// 		res.status(200).json(result);
-	// 	})
-	// 	.catch((err) => {
-	// 		res.send(err);
-	// 	});
+	const id = req.params.id;
+	const { title, description } = req.body;
+	console.log("title",title)
+	const query = `UPDATE articles
+    SET title=?, description = ?
+    WHERE id=${id}`;
+	const data = [title, description];
+	db.query(query, data, (err, results) => {
+		console.log(results);
+		res.json(results)
+	});
 };
+
+
 
 const deleteArticleById = (req, res) => {
 	// const id = req.params.id;
