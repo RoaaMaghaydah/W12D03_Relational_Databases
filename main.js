@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 
 // router middleware
-app.use('/users', usersRouter);
+app.use( usersRouter);
 app.use('/articles', articlesRouter);
 app.use(authRouter);
 app.use(commentsRouter);
