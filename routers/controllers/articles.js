@@ -1,14 +1,12 @@
 const db = require('./../../db/db');
 
 const getAllArticles = (req, res) => {
-	// articlesModel
-	// 	.find({})
-	// 	.then((result) => {
-	// 		res.status(200).json(result);
-	// 	})
-	// 	.catch((err) => {
-	// 		res.send(err);
-	// 	});
+	const query = `SELECT * FROM articles`;
+	db.query(query, (err, result) => {
+		if (err) throw err;
+		console.log('RESULT: ', result);
+		res.json(result)
+	});
 };
 
 const getArticlesByAuthor = (req, res) => {
@@ -46,8 +44,8 @@ const getAnArticleById = (req, res) => {
 const createNewArticle = (req, res) => {
 	const { title, description, author_id } = req.body;
 	const query = `INSERT INTO articles (title, description,author_id ) VALUES (?,?,?)`;
-	const data = [title, description,author_id];
- 	db.query(query, data, (err, results) => {
+	const data = [title, description, author_id];
+	db.query(query, data, (err, results) => {
 		console.log(results);
 		res.json(results)
 	});
