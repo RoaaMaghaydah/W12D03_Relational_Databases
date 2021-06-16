@@ -9,8 +9,7 @@ const getAllArticles = (req, res) => {
 	});
 };
 
-const getArticlesByAuthor = (req, res) => {
-	
+const getArticlesByAuthor = (req, res) => {	
 	const auth = req.query.author;
 	const query = `SELECT *  FROM  articles
 	INNER JOIN  users ON users.id=author_id`;
@@ -29,7 +28,7 @@ const getArticlesByAuthor = (req, res) => {
 const getAnArticleById = (req, res) => {
 	const auth = req.params.id;
 	const query = `SELECT users.firstName ,users.id  FROM  articles
-	INNER JOIN  users ON users.id=${auth}`;  
+	INNER JOIN  users ON users.id=${auth} AND `;  
 	db.query(query, (err, result) => {
 		const arr = []
 		if (err) throw err;		
