@@ -1,7 +1,7 @@
 const db = require('./../../db/db');
 
 const getAllArticles = (req, res) => {
-	const query = `SELECT * FROM articles`;
+	const query = `SELECT * FROM articles WHERE is_deleted=0`;
 	db.query(query, (err, result) => {
 		if (err) throw err;
 		console.log('RESULT: ', result);
@@ -9,32 +9,27 @@ const getAllArticles = (req, res) => {
 	});
 };
 
-const getArticlesByAuthor = (req, res) => {	
+const getArticlesByAuthor = (req, res) => {
 	const auth = req.query.author;
-	const query = `SELECT *  FROM  articles
+	const query = `SELECT articles.title, articles.description,articles.id  FROM  articles
 	INNER JOIN  users ON users.id=author_id`;
 	db.query(query, (err, result) => {
 		const arr = []
 		if (err) throw err;
-		result.map((elem, i) => {
-			if (elem.firstName == auth && elem.is_deleted !== 1) {
-				arr.push({ title: elem.title, description: elem.description })
-			}
-		})
-		res.json(arr)
+		res.json(result)
 	});
 };
 
 const getAnArticleById = (req, res) => {
-	const auth = req.params.id;
-	const query = `SELECT users.firstName ,users.id  FROM  articles
-	INNER JOIN  users ON users.id=${auth} AND `;  
+	const id = req.params.id;
+	const query = `SELECT users.firstName ,users.id ,articles.title, articles.description,articles.id FROM  articles
+	INNER JOIN  users ON articles.id=${id} AND users.id=author_id`;
 	db.query(query, (err, result) => {
 		const arr = []
-		if (err) throw err;		
+		if (err) throw err;
 		res.json(result)
 	});
-	
+
 };
 
 const createNewArticle = (req, res) => {
@@ -74,20 +69,14 @@ const deleteArticleById = (req, res) => {
 
 const deleteArticlesByAuthor = (req, res) => {
 	const auth = req.query.author;
-	const query = `SELECT *  FROM  articles
-	INNER JOIN  users ON users.id=author_id AND  users.firstName=?`;
+	const query = `UPDATE articles
+   SET is_deteted=1
+   WHERE  id=?`;
 	const arr = [auth]
-	db.query(query,arr,(err, result) => {	
+	db.query(query, arr, (err, result) => {
 		if (err) throw err;
-		console.log("roaa",result)
-		// result.map((elem, i) => {
-		// 	if (elem.firstName == auth && elem.is_deleted !== 1) {
-			
-		// 		elem.is_deleted=1;
-		// 		arr.push(elem)
-		// 	}
-		// })
-		
+		console.log("roaa", result)
+		res.json(result);
 	});
 
 };
